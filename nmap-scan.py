@@ -71,7 +71,7 @@ def parsexml(file):
                                'ssl_cn'           :  common_name,
                                'ssl_orgname'      :  orgname,
                                'ssl_valid'        :  valid_after,}
-              else: 
+              else:
                 _service =    {'protocol'        :  port.get("protocol"),
                                'portid'           :  port.get("portid"),
                                'product'          :  service.get("product"),
@@ -120,7 +120,7 @@ def print_hosts(collection):
 
 def print_ansible(collection):
   for i in collection:
-    print "%s\tansible_ssh_user=%s\tansible_ssh_pass=%s" % (i, 'root', '#cdtg-root#')       
+    print "%s\tansible_ssh_user=%s\tansible_ssh_pass=%s" % (i, 'root', 'changeme')       
 
 
 def print_raw(collection):
@@ -144,7 +144,7 @@ def get_mongo_handle(client, database, collection):
     Get a collections handle in a database returns database and collection object
     """
 
-    db = getattr(client,database) 
+    db = getattr(client,database)
     # db = client.fastops
     col = getattr(db,collection)
     #db = client.fastops
@@ -176,7 +176,7 @@ def find_one(query, col):
     Find a document in collection based on query
     """
     retval = col.find_one(query)
-    if retval is not None:  
+    if retval is not None:
       return True
     else:
       return False
@@ -197,18 +197,16 @@ if __name__ == "__main__":
    args = docopt(__doc__)
    records = parsexml(args['FILE'])
    if args["--hosts"]:
-    print_hosts(records)   
+    print_hosts(records)
    if args["--ansible"]:
     print_ansible(records)
    if args["--raw"]:
     print_raw(records)
 
-   
+
    if args["--host"]:
     url = "mongodb://{host}:{port}/".format(host=args["--host"], port=args["--port"])
     client = MongoClient(url)
     (db, col)  = get_mongo_handle(client, args["--database"], args["--collection"])
     update_collection(records, col)
     client.close()
-
-
